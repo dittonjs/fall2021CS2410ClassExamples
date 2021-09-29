@@ -13,6 +13,7 @@ public class PhoneButton extends AppCompatButton {
         params.rowSpec = GridLayout.spec(data.row, 1,1);
         params.columnSpec = GridLayout.spec(data.col, data.colSpan, 1);
         setText(data.text);
+        setTextSize(24);
         setLayoutParams(params);
     }
 }

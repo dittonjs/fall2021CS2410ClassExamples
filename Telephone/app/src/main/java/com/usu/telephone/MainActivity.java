@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -16,32 +17,46 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<PhoneButtonData> buttonData = new ArrayList<PhoneButtonData>() {
         {
-            add(new PhoneButtonData())
+            add(new PhoneButtonData("1", 1, 0, 1));
+            add(new PhoneButtonData("2", 1, 1, 1));
+            add(new PhoneButtonData("3", 1, 2, 1));
+            add(new PhoneButtonData("4", 2, 0, 1));
+            add(new PhoneButtonData("5", 2, 1, 1));
+            add(new PhoneButtonData("6", 2, 2, 1));
+            add(new PhoneButtonData("7", 3, 0, 1));
+            add(new PhoneButtonData("8", 3, 1, 1));
+            add(new PhoneButtonData("9", 3, 2, 1));
+            add(new PhoneButtonData("CLEAR", 4, 0, 1, PhoneButtonData.ButtonType.CLEAR));
+            add(new PhoneButtonData("0", 4, 1, 1));
+            add(new PhoneButtonData("CALL", 4, 2, 1, PhoneButtonData.ButtonType.CALL));
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GridLayout mainLayout = new GridLayout(this);
 
-        int[] values = {1,2,3};
+        PhoneNumberDisplay display = new PhoneNumberDisplay(this);
+        mainLayout.addView(display);
 
-        LinearLayout mainLayout = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
+        buttonData.forEach(data -> {
+            PhoneButton button = new PhoneButton(this, data);
+            button.setOnClickListener(view -> {
+                if (data.buttonType == PhoneButtonData.ButtonType.NUMBER) {
+                    display.setText(display.getText().toString() + data.text);
+                } else if(data.buttonType == PhoneButtonData.ButtonType.CLEAR) {
+                    display.setText("");
+                } else {
+                    Intent phoneIntent = new Intent(Intent.ACTION_CALL);
+                    phoneIntent.setData(Uri.parse("tel:" + display.getText().toString()));
+                    startActivity(phoneIntent);
+                }
+            });
+            mainLayout.addView(button);
 
-        AppCompatEditText phoneNumberEditText = new AppCompatEditText(this);
-        phoneNumberEditText.setInputType(InputType.TYPE_CLASS_PHONE);
-
-        AppCompatButton callButton = new AppCompatButton(this);
-        callButton.setOnClickListener(view -> {
-            Intent phoneIntent = new Intent(Intent.ACTION_CALL);
-            phoneIntent.setData(Uri.parse("tel:" + phoneNumberEditText.getText().toString()));
-            startActivity(phoneIntent);
         });
-        callButton.setText("CALL");
 
-        mainLayout.addView(phoneNumberEditText);
-        mainLayout.addView(callButton);
 
         setContentView(mainLayout);
     }
