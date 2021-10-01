@@ -15,27 +15,27 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<PhoneButtonData> buttonData = new ArrayList<PhoneButtonData>() {
-        {
-            add(new PhoneButtonData("1", 1, 0, 1));
-            add(new PhoneButtonData("2", 1, 1, 1));
-            add(new PhoneButtonData("3", 1, 2, 1));
-            add(new PhoneButtonData("4", 2, 0, 1));
-            add(new PhoneButtonData("5", 2, 1, 1));
-            add(new PhoneButtonData("6", 2, 2, 1));
-            add(new PhoneButtonData("7", 3, 0, 1));
-            add(new PhoneButtonData("8", 3, 1, 1));
-            add(new PhoneButtonData("9", 3, 2, 1));
-            add(new PhoneButtonData("CLEAR", 4, 0, 1, PhoneButtonData.ButtonType.CLEAR));
-            add(new PhoneButtonData("0", 4, 1, 1));
-            add(new PhoneButtonData("CALL", 4, 2, 1, PhoneButtonData.ButtonType.CALL));
-        }
-    };
-
+    MainActivity me = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GridLayout mainLayout = new GridLayout(this);
+        ArrayList<PhoneButtonData> buttonData = new ArrayList<PhoneButtonData>() {
+            {
+                add(new PhoneButtonData("1", 1, 0, 1));
+                add(new PhoneButtonData("2", 1, 1, 1));
+                add(new PhoneButtonData("3", 1, 2, 1));
+                add(new PhoneButtonData("4", 2, 0, 1));
+                add(new PhoneButtonData("5", 2, 1, 1));
+                add(new PhoneButtonData("6", 2, 2, 1));
+                add(new PhoneButtonData("7", 3, 0, 1));
+                add(new PhoneButtonData("8", 3, 1, 1));
+                add(new PhoneButtonData("9", 3, 2, 1));
+                add(new PhoneButtonData(getResources().getString(R.string.clear_text), 4, 0, 1, PhoneButtonData.ButtonType.CLEAR));
+                add(new PhoneButtonData("0", 4, 1, 1));
+                add(new PhoneButtonData(getResources().getString(R.string.call_text), 4, 2, 1, PhoneButtonData.ButtonType.CALL));
+            }
+        };
 
         PhoneNumberDisplay display = new PhoneNumberDisplay(this);
         mainLayout.addView(display);
