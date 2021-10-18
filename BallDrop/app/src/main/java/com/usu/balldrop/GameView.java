@@ -4,8 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.Choreographer;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.view.GestureDetectorCompat;
 
 import java.util.ArrayList;
 
@@ -23,12 +26,31 @@ public class GameView extends View implements Choreographer.FrameCallback {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         time = System.nanoTime();
-        setOnTouchListener((view, motionEvent) -> {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                gameObjects.add(new Ball(motionEvent.getX(), motionEvent.getY(), getHeight()));
+
+        GestureDetectorCompat detectorCompat = new GestureDetectorCompat(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
                 return true;
             }
-            return false;
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                gameObjects.add(new Ball(e.getX(), e.getY(), getHeight(), getWidth()));
+                return true;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+                gameObjects.forEach(go -> {
+                    Ball ball = (Ball)go;
+                    ball.addRandomForce();
+                });
+            }
+        });
+
+
+        setOnTouchListener((view, motionEvent) -> {
+            return detectorCompat.onTouchEvent(motionEvent);
         });
         Choreographer.getInstance().postFrameCallback(this);
     }
