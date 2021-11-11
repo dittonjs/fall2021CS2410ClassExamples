@@ -18,6 +18,16 @@ public class SecondFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentSecondBinding binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding.button3.setOnClickListener(view -> {
+
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .
+                    .add(R.id.fragment_container_view, MainFragment.class, null)
+                    .addToBackStack(null)
+                    .commit();
+        });
         return binding.getRoot();
     }
 }

@@ -29,9 +29,10 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentMainBinding binding = FragmentMainBinding.inflate(inflater, container, false);
         binding.button2.setOnClickListener(view -> {
-            getActivity().getSupportFragmentManager()
+            getActivity()
+                    .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container_view, SecondFragment.class, null)
+                    .add(R.id.fragment_container_view, SecondFragment.class, null)
                     .addToBackStack(null)
                     .commit();
 
@@ -57,6 +58,11 @@ public class MainFragment extends Fragment {
         System.out.println("FRAGMENT STOPPED");
 
         super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
