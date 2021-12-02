@@ -31,8 +31,11 @@ public class TodosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentTodosBinding binding = FragmentTodosBinding.inflate(inflater, container, false);
+
         TodosViewModel viewModel = new ViewModelProvider(requireActivity()).get(TodosViewModel.class);
+        viewModel.loadTodos();
         binding.fab.setOnClickListener(view -> {
+            viewModel.setCurrentTodo(null);
             getActivity().getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragmentContainerView, EditTodoFragment.class, null)
@@ -42,7 +45,15 @@ public class TodosFragment extends Fragment {
         });
 
         System.out.println("am I getting called again? " + callCount++);
-        binding.recyclerView.setAdapter(new TodosAdapter(viewModel.getTodos()));
+        binding.recyclerView.setAdapter(new TodosAdapter(viewModel, todo -> {
+            viewModel.setCurrentTodo(todo);
+            getActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragmentContainerView, EditTodoFragment.class, null)
+                    .addToBackStack(null)
+                    .setReorderingAllowed(true)
+                    .commit();
+        }));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // Inflate the layout for this fragment
         return binding.getRoot();
